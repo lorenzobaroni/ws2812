@@ -66,6 +66,16 @@ void configurar_led_rgb() {
     gpio_set_dir(PINO_RGB_B, GPIO_OUT);
 }
 
+// Configuração inicial dos botões
+void configurar_botoes() {
+    gpio_init(PINO_BOTAO_A);
+    gpio_init(PINO_BOTAO_B);
+    gpio_set_dir(PINO_BOTAO_A, GPIO_IN);
+    gpio_set_dir(PINO_BOTAO_B, GPIO_IN);
+    gpio_pull_up(PINO_BOTAO_A); // Ativa o pull-up interno
+    gpio_pull_up(PINO_BOTAO_B); // Ativa o pull-up interno
+}
+
 // Função para piscar o LED RGB
 void piscar_led_rgb() {
     static absolute_time_t ultimo_piscar = {0};
@@ -86,6 +96,8 @@ int main() {
     uint deslocamento = pio_add_program(pio, &ws2812_program);
     uint sm = pio_claim_unused_sm(pio, true);
     ws2812_program_init(pio, sm, deslocamento, PINO_WS2812, 800000, false);
+
+    configurar_botoes();
 
     // Configura interrupções para os botões
     gpio_set_irq_enabled_with_callback(PINO_BOTAO_A, GPIO_IRQ_EDGE_FALL, true, debouce_e_incrementa);

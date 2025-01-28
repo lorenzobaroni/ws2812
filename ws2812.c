@@ -42,6 +42,17 @@ void exibir_numero(PIO pio, uint sm, const uint32_t padrao_numero[]) {
     }
 }
 
+// Função para piscar o LED RGB
+void piscar_led_rgb() {
+    static absolute_time_t ultimo_piscar = {0};
+    static bool estado = false;
+    if (absolute_time_diff_us(ultimo_piscar, get_absolute_time()) > 100000) {
+        gpio_put(PINO_RGB_R, estado); 
+        estado = !estado; 
+        ultimo_piscar = get_absolute_time(); 
+    }
+}
+
 // Função principal
 int main() {
     stdio_init_all();
@@ -60,6 +71,7 @@ int main() {
 
 
     while (true) {
+        piscar_led_rgb();
         exibir_numero(pio, sm, formatos_numeros[numero_atual]);
         sleep_ms(100); // Aguarda 100 ms antes de atualizar
     }

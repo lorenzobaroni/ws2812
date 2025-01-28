@@ -20,12 +20,32 @@
 // Variável global para rastrear o número atual a ser exibido
 volatile int numero_atual = 0;
 
+// Números para a matriz de LEDs
+const uint32_t formatos_numeros[10][NUMERO_PIXELS] = {
+    {1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1}, 
+    {0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0}, 
+    {1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1}, 
+    {1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1}, 
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1}, 
+    {1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1}, 
+    {1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1}, 
+    {0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1}, 
+    {1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1}, 
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1}  
+};
+
+// Função para exibir o número na matriz de LEDs
+void exibir_numero(PIO pio, uint sm, const uint32_t padrao_numero[]) {
+    for (int i = 0; i < NUMERO_PIXELS; i++) {
+        uint32_t cor = padrao_numero[i] ? 0xFF0000 : 0x000000; 
+        pio_sm_put_blocking(pio, sm, cor); 
+    }
+}
+
 // Função principal
 int main() {
-    // Inicializa entrada e saída padrão
     stdio_init_all();
 
-    // Inicializa o PIO e configura o programa para LEDs WS2812
     PIO pio = pio0;
     uint deslocamento = pio_add_program(pio, &ws2812_program);
     uint sm = pio_claim_unused_sm(pio, true);
@@ -38,8 +58,9 @@ int main() {
     // Configura os LEDs RGB
     configurar_led_rgb();
 
-    // Loop principal
+
     while (true) {
+        exibir_numero(pio, sm, formatos_numeros[numero_atual]);
         sleep_ms(100); // Aguarda 100 ms antes de atualizar
     }
 }

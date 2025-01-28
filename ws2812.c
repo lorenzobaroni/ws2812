@@ -42,6 +42,16 @@ void exibir_numero(PIO pio, uint sm, const uint32_t padrao_numero[]) {
     }
 }
 
+// Configuração dos pinos do LED RGB
+void configurar_led_rgb() {
+    gpio_init(PINO_RGB_R);
+    gpio_init(PINO_RGB_G);
+    gpio_init(PINO_RGB_B);
+    gpio_set_dir(PINO_RGB_R, GPIO_OUT);
+    gpio_set_dir(PINO_RGB_G, GPIO_OUT);
+    gpio_set_dir(PINO_RGB_B, GPIO_OUT);
+}
+
 // Função para piscar o LED RGB
 void piscar_led_rgb() {
     static absolute_time_t ultimo_piscar = {0};

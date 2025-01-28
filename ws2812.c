@@ -34,6 +34,19 @@ const uint32_t formatos_numeros[10][NUMERO_PIXELS] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1}  
 };
 
+// Função para debouncing e alteração do número atual
+void debouce_e_incrementa(uint gpio, uint32_t eventos) {
+    static absolute_time_t tempo_anterior = {0};
+    if (absolute_time_diff_us(tempo_anterior, get_absolute_time()) > 200000) {
+        if (gpio == PINO_BOTAO_A) {
+            numero_atual = (numero_atual + 1) % 10;
+        } else if (gpio == PINO_BOTAO_B) {
+            numero_atual = (numero_atual - 1 + 10) % 10;
+        }
+        tempo_anterior = get_absolute_time();
+    }
+}
+
 // Função para exibir o número na matriz de LEDs
 void exibir_numero(PIO pio, uint sm, const uint32_t padrao_numero[]) {
     for (int i = 0; i < NUMERO_PIXELS; i++) {
@@ -63,7 +76,6 @@ void piscar_led_rgb() {
     }
 }
 
-// Função principal
 int main() {
     stdio_init_all();
 
@@ -73,8 +85,8 @@ int main() {
     ws2812_program_init(pio, sm, deslocamento, PINO_WS2812, 800000, false);
 
     // Configura interrupções para os botões
-    gpio_set_irq_enabled_with_callback(PINO_BOTAO_A, GPIO_IRQ_EDGE_FALL, true, );
-    gpio_set_irq_enabled_with_callback(PINO_BOTAO_B, GPIO_IRQ_EDGE_FALL, true, );
+    gpio_set_irq_enabled_with_callback(PINO_BOTAO_A, GPIO_IRQ_EDGE_FALL, true, debouce_e_incrementa);
+    gpio_set_irq_enabled_with_callback(PINO_BOTAO_B, GPIO_IRQ_EDGE_FALL, true, debouce_e_incrementa);
 
     // Configura os LEDs RGB
     configurar_led_rgb();

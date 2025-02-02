@@ -1,12 +1,12 @@
-# Tarefa: Exibição de Números e Controle de LED RGB com Raspberry Pi Pico
+# Tarefa: Exibição de Números e Controle de LED RGB com Raspberry Pi Pico W
 
-Este projeto tem como objetivo controlar uma matriz de LEDs WS2812 e um LED RGB utilizando o microcontrolador Raspberry Pi Pico. O programa implementa a exibição de números na matriz de LEDs e o controle de um LED RGB que pisca continuamente. Além disso, dois botões permitem a navegação pelos números exibidos.
+Este projeto tem como objetivo controlar uma matriz de LEDs WS2812 e um LED RGB utilizando o microcontrolador Raspberry Pi Pico W. O programa implementa a exibição de números na matriz de LEDs e o controle de um LED RGB que pisca continuamente. Além disso, dois botões permitem a navegação pelos números exibidos.
 
 ---
 
 ## Link do Vídeo Ensaio
 
-[Demonstração de Funcionamento do Projeto]()
+[Demonstração de Funcionamento do Projeto](https://www.youtube.com/watch?v=fFORNoJMAN4&ab_channel=LorenzoGiuseppeOliveiraBaroni)
 
 ---
 
